@@ -6,11 +6,6 @@ import (
 	"sync"
 )
 
-//type Factory struct {
-//	sync.RWMutex                        // 读写锁
-//	providers    map[string]store.Store // 存储满足Store接口的实例
-//}
-//
 //func NewFactory() *Factory {
 //	return &Factory{
 //		providers: make(map[string]store.Store),

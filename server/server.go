@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"simple-http-server/server/middleware"
 	"simple-http-server/store"
@@ -23,8 +22,8 @@ func NewBookStoreServer(addr string, s store.Store) *BookStoreServer {
 			Addr: addr,
 		},
 	}
-	mux := http.NewServeMux()
 
+	mux := http.NewServeMux()
 	// RESTFul 风格的API 标准接口
 	// 创建书接口
 	mux.HandleFunc("POST /book", srv.createBookHandler)
@@ -48,11 +47,14 @@ func NewBookStoreServer(addr string, s store.Store) *BookStoreServer {
 func (bs *BookStoreServer) ListenAndServe() (<-chan error, error) {
 	var err error
 	errChan := make(chan error)
+	// 开启一个goroutine,启动服务器
 	go func() {
 		err = bs.srv.ListenAndServe()
+		// 如果发生错误，则将错误发送到 errChan,然后关闭服务器
 		errChan <- err
 	}()
 
+	// 创建一个定时器，如果 1 秒后还没有收到 errChan 的数据，则说明服务器启动成功
 	select {
 	case err = <-errChan:
 		return nil, err
@@ -66,7 +68,6 @@ func (bs *BookStoreServer) Shutdown(ctx context.Context) error {
 }
 
 func (bs *BookStoreServer) createBookHandler(resp http.ResponseWriter, req *http.Request) {
-	fmt.Println("Hello")
 	dec := json.NewDecoder(req.Body)
 	var book store.Book
 	if err := dec.Decode(&book); err != nil {

@@ -15,7 +15,6 @@ import (
 func main() {
 	// 创建存储对象
 	s, err := factory.New("mem")
-
 	if err != nil {
 		panic(err)
 	}
@@ -23,20 +22,24 @@ func main() {
 	// 创建BookStoreServer
 	srv := server.NewBookStoreServer(":8080", s)
 
-	errchan, err := srv.ListenAndServe()
+	// 启动服务器
+	errChan, err := srv.ListenAndServe()
 	if err != nil {
 		log.Println("Web Server Start Failed", err)
 		return
 	}
 	log.Print("Web Server Start Success")
 
+	// 监听系统信号
 	c := make(chan os.Signal)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 
 	select {
-	case err = <-errchan:
+	// 发送错误的信号
+	case err = <-errChan:
 		log.Println("bookstore server error:", err)
 		return
+	// 正常推出的信号
 	case <-c:
 		log.Println("bookstore program is exiting...")
 		ctx, cf := context.WithTimeout(context.Background(), time.Second)
