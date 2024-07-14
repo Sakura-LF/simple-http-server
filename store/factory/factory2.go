@@ -6,6 +6,8 @@ import (
 	"sync"
 )
 
+// StoreFactory 存储工厂
+// 不同于字节暴露包级别的变量，封装成结构体更安全
 type StoreFactory struct {
 	sync.RWMutex                        // 读写锁
 	providers    map[string]store.Store // 存储满足Store接口的实例
