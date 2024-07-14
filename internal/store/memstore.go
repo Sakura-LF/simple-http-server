@@ -86,10 +86,11 @@ func (ms *MemBookStore) Delete(id string) error {
 	ms.Lock()
 	defer ms.Unlock()
 
+	// 如果没有这个 id，则返回 ErrNotFound 错误
 	if _, ok := ms.books[id]; !ok {
 		return store.ErrNotFound
 	}
-
+	// 删除这个 id 对应的图书
 	delete(ms.books, id)
 	return nil
 }
@@ -99,6 +100,7 @@ func (ms *MemBookStore) GetAll() ([]store.Book, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
+	// 创建一个切片，切片的长度等于 map 的长度，切片的容量等于 map 的长度
 	allBooks := make([]store.Book, 0, len(ms.books))
 	for _, book := range ms.books {
 		allBooks = append(allBooks, *book)

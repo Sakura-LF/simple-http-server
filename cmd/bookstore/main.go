@@ -35,7 +35,7 @@ func main() {
 
 	select {
 	case err = <-errchan:
-		log.Println("bookstore server error:")
+		log.Println("bookstore server error:", err)
 		return
 	case <-c:
 		log.Println("bookstore program is exiting...")
