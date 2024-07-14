@@ -22,8 +22,8 @@
 │ └── factory.go
 └── store.go
 ```
-> 两种创建工厂的写法
+> **两种创建工厂的流程**
 
-![img.png](img.png)
+![img.png](assets/images/img.png)
 
-![img_1.png](img_1.png)
+![img_1.png](assets/images/img_1.png)
